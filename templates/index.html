@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatch — Find Your Next Favourite Film</title>
+    <meta name="description" content="AI-powered movie recommender. Pick any movie and instantly get 5 titles you'll love, powered by content-based similarity.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Ambient glow orbs -->
+    <div class="glow glow--top"></div>
+    <div class="glow glow--left"></div>
+    <div class="glow glow--right"></div>
+
+    <div class="page-wrapper">
+
+        <!-- ── Hero ── -->
+        <header class="hero">
+            <div class="badge">
+                <span class="badge__dot"></span>
+                AI-Powered
+            </div>
+            <h1 class="hero__title">
+                Find Your Next<br>
+                <span class="hero__title--gradient">Favourite Film</span>
+            </h1>
+            <p class="hero__subtitle">
+                Pick any movie and our engine will instantly surface 5 titles you'll<br>
+                love &mdash; powered by content-based similarity.
+            </p>
+        </header>
+
+        <!-- ── Search Card ── -->
+        <section class="search-card" aria-label="Movie search">
+            <p class="search-card__label">🎬 CHOOSE A MOVIE</p>
+
+            <div class="input-wrapper" id="input-wrapper">
+                <input
+                    type="text"
+                    id="movie-search"
+                    class="search-input"
+                    placeholder="Search for a movie title..."
+                    autocomplete="off"
+                    aria-label="Search movies"
+                    aria-autocomplete="list"
+                    aria-controls="dropdown-list"
+                />
+                <span class="search-icon">🔍</span>
+                <!-- Autocomplete dropdown -->
+                <ul id="dropdown-list" class="dropdown" role="listbox" aria-label="Movie suggestions"></ul>
+            </div>
+
+            <!-- Selected movie pill -->
+            <div id="selected-pill-container" class="pill-container"></div>
+
+            <button id="recommend-btn" class="cta-btn" disabled>
+                ✨ Get Recommendations
+            </button>
+        </section>
+
+        <!-- ── Results ── -->
+        <section id="results-section" class="results-section hidden" aria-live="polite">
+
+            <div class="section-divider">
+                <span class="section-divider__line"></span>
+                <span class="section-divider__text">RECOMMENDED FOR YOU</span>
+                <span class="section-divider__line"></span>
+            </div>
+
+            <div class="results-header">
+                <div class="results-header__left">
+                    <h2 class="results-heading">🍿 Top Picks</h2>
+                    <p class="results-subheading">Because you liked <strong id="liked-movie-name" class="accent-text"></strong></p>
+                </div>
+                <span class="results-badge" id="results-count-badge">5 movies</span>
+            </div>
+
+            <!-- Loading spinner -->
+            <div id="loader" class="loader hidden">
+                <div class="loader__ring"></div>
+            </div>
+
+            <!-- Cards grid -->
+            <div id="movies-grid" class="movies-grid"></div>
+
+        </section>
+
+        <!-- ── Footer ── -->
+        <footer class="footer">
+            Made with <span class="footer__heart">♥</span> &middot; MovieMatch Recommender
+        </footer>
+
+    </div>
+
+    <!-- Movie list passed from Flask (hidden) -->
+    <script id="movies-data" type="application/json">
+        {{ movies | tojson }}
+    </script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
