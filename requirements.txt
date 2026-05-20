@@ -1,5 +1,7 @@
 Flask
-requests
-pandas
 gunicorn
 gdown
+numpy
+pandas
+scikit-learn
+requests
