@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from sklearn.metrics.pairwise import cosine_similarity
 import os
-import gdown
 import pickle
 import requests
 import pandas as pd
@@ -9,21 +8,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 app = Flask(__name__)
 
-# Download movies.pkl if not present
-if not os.path.exists("movies.pkl"):
-    gdown.download(
-        "https://drive.google.com/uc?id=1_09WXqvQglR5gxA3Lb64Q4BwUf03vZ2X",
-        "movies.pkl",
-        quiet=False
-    )
-
-# Download vectors.pkl if not present
-if not os.path.exists("vectors.pkl"):
-    gdown.download(
-        "https://drive.google.com/uc?id=1veeik5l3CZW0p4zXE7BZjN1PfLe_Ebc0",
-        "vectors.pkl",
-        quiet=False
-    )
 
 # Load models safely
 try:

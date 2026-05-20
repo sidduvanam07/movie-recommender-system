@@ -16,8 +16,6 @@ __pycache__/
 # Jupyter Notebooks
 .ipynb_checkpoints
 
-# Large Machine Learning Models (Ignored BecauseGitHub blocks >100MB)
-*.pkl
 *.part
 
 # OS generated files
