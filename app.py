@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from sklearn.metrics.pairwise import cosine_similarity
 import os
 import gdown
 import pickle
@@ -11,16 +12,16 @@ app = Flask(__name__)
 # Download movies.pkl if not present
 if not os.path.exists("movies.pkl"):
     gdown.download(
-        "https://drive.google.com/uc?id=1QvAZV4fL11LH4ts_cBiYNDZxDAd8Bc5j",
+        "https://drive.google.com/uc?id=1_09WXqvQglR5gxA3Lb64Q4BwUf03vZ2X",
         "movies.pkl",
         quiet=False
     )
 
-# Download similarity.pkl if not present
-if not os.path.exists("similarity.pkl"):
+# Download vectors.pkl if not present
+if not os.path.exists("vectors.pkl"):
     gdown.download(
-        "https://drive.google.com/uc?id=1on77PcBebCnpI24zd6QWBHQ7jE4izJwZ",
-        "similarity.pkl",
+        "https://drive.google.com/uc?id=1veeik5l3CZW0p4zXE7BZjN1PfLe_Ebc0",
+        "vectors.pkl",
         quiet=False
     )
 
@@ -29,7 +30,7 @@ try:
     movies_data = pickle.load(open('movies.pkl', 'rb'))
     movies = pd.DataFrame(movies_data) if isinstance(movies_data, dict) else movies_data
 
-    similarity = pickle.load(open('similarity.pkl', 'rb'))
+    vectors = pickle.load(open('vectors.pkl', 'rb'))
 
     all_movies = movies['title'].values
 
@@ -37,7 +38,7 @@ except Exception as e:
     print("Error loading model files:", e)
 
     movies = None
-    similarity = None
+    vectors = None
     all_movies = []
 
 TMDB_API_KEY = "8265bd1679663a7ea12ac168da84d2e8"
@@ -59,12 +60,12 @@ def fetch_poster(movie_id):
 
 def recommend(movie):
     """Returns the top 5 similar movies with posters fetched concurrently."""
-    if movies is None or similarity is None:
+    if movies is None or vectors is None:
         return []
 
     try:
         movie_index      = movies[movies['title'] == movie].index[0]
-        distances        = similarity[movie_index]
+        distances = cosine_similarity([vectors[movie_index]], vectors)[0]
         top5             = sorted(enumerate(distances), key=lambda x: x[1], reverse=True)[1:6]
 
         # Build candidate list
